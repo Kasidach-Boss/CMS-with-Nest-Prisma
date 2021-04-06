@@ -6,6 +6,7 @@ import {
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Post as PostModel } from '@prisma/client';
+import { runInThisContext } from 'node:vm';
 
 @Injectable()
 export class UsersService {
@@ -63,4 +64,18 @@ export class UsersService {
             where,
         })
     }
+
+    async findByEmail(where: Prisma.UserWhereUniqueInput){
+        const getUser: object | null = await this.prisma.user.findUnique({
+            where,
+            select: {
+              email: true,
+              
+            },
+          })
+        
+    }
+    // async findOne(username: string): Promise<User | undefined> {
+    //     return this.users.find(user => user.username === username);
+    //   }
 }
